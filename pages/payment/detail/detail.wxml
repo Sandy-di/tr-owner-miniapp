@@ -1,0 +1,54 @@
+<!--pages/payment/detail/detail.wxml-->
+<view class="page-payment-detail" wx:if="{{payment}}">
+  <view class="container">
+    <view class="amount-header card text-center">
+      <text class="amount-label">{{payment.title}}</text>
+      <text class="amount-value">{{payment.amountText}}</text>
+      <view class="tag {{payment.status === 'unpaid' ? 'tag-warning' : 'tag-success'}}">
+        {{payment.statusText}}
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="section-title">
+        <text class="icon">📄</text>
+        <text>账单详情</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">账单编号</text>
+        <text class="info-value">{{payment.payment_id}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">费用类型</text>
+        <text class="info-value">{{payment.type === 'property_fee' ? '物业费' : (payment.type === 'parking_fee' ? '车位管理费' : '水费')}}</text>
+      </view>
+      <view class="info-row flex-between" wx:if="{{payment.area}}">
+        <text class="info-label">房屋面积</text>
+        <text class="info-value">{{payment.area}}㎡</text>
+      </view>
+      <view class="info-row flex-between" wx:if="{{payment.unit_price}}">
+        <text class="info-label">单价</text>
+        <text class="info-value">{{payment.unit_price}}元/㎡/月</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">账期</text>
+        <text class="info-value">{{payment.period}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">截止日期</text>
+        <text class="info-value">{{payment.due_date}}</text>
+      </view>
+      <view class="info-row flex-between" wx:if="{{payment.paid_date}}">
+        <text class="info-label">缴费日期</text>
+        <text class="info-value">{{payment.paid_date}}</text>
+      </view>
+      <view class="info-row flex-between" wx:if="{{payment.transaction_id}}">
+        <text class="info-label">交易流水号</text>
+        <text class="info-value">{{payment.transaction_id}}</text>
+      </view>
+    </view>
+
+    <view class="btn-primary mt-40 mb-40" bindtap="onPay" wx:if="{{payment.status === 'unpaid'}}">立即缴费</view>
+    <view class="btn-outline mt-40 mb-40" bindtap="onViewReceipt" wx:if="{{payment.status === 'paid'}}">查看电子收据</view>
+  </view>
+</view>

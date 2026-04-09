@@ -1,0 +1,167 @@
+/* pages/repair/create/create.wxss - 发起报修 v3.0 · Stripe */
+.page-repair-create {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 60rpx;
+}
+
+.picker-input {
+  display: flex;
+  align-items: center;
+}
+
+.placeholder {
+  color: var(--body);
+}
+
+.picker-arrow {
+  color: var(--body);
+  font-size: 32rpx;
+}
+
+/* 图片 */
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.image-item {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48rpx;
+  height: 48rpx;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 0 var(--radius-sm);
+}
+
+.remove-icon {
+  width: 24rpx;
+  height: 24rpx;
+  filter: brightness(0) invert(1);
+}
+
+.image-add {
+  width: 200rpx;
+  height: 200rpx;
+  border: 2rpx dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-input);
+  transition: all var(--transition-fast);
+}
+
+.image-add:active {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+
+.add-icon {
+  width: 48rpx;
+  height: 48rpx;
+  opacity: 0.35;
+}
+
+.add-text {
+  font-size: 22rpx;
+  color: var(--body);
+  margin-top: 8rpx;
+}
+
+/* 语音 */
+.voice-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  border: 2rpx dashed var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.voice-btn:active {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+
+.voice-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 12rpx;
+  opacity: 0.6;
+}
+
+.voice-text {
+  font-size: 28rpx;
+  color: var(--body);
+  font-weight: 400;
+}
+
+/* 日期 */
+.date-list {
+  overflow-x: auto;
+  gap: 12rpx;
+  flex-wrap: nowrap;
+}
+
+.date-item {
+  flex-shrink: 0;
+  padding: 14rpx 24rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 24rpx;
+  color: var(--body);
+  font-weight: 400;
+  transition: all var(--transition-fast);
+}
+
+.date-active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(83, 58, 253, 0.05);
+  font-weight: 500;
+}
+
+/* 时段 */
+.time-list {
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.time-item {
+  padding: 18rpx 28rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 26rpx;
+  color: var(--body);
+  font-weight: 400;
+  transition: all var(--transition-fast);
+}
+
+.time-active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(83, 58, 253, 0.05);
+  font-weight: 500;
+}

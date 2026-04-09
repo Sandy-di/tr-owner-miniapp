@@ -1,0 +1,173 @@
+<!--pages/vote/detail/detail.wxml-->
+<view class="page-vote-detail">
+  <view class="container" wx:if="{{vote}}">
+    <!-- 投票状态头部 -->
+    <view class="vote-header card">
+      <view class="flex-between mb-20">
+        <view class="tag {{vote.status === 'active' ? 'tag-primary' : (vote.status === 'published' ? 'tag-success' : 'tag-warning')}}">
+          {{statusText}}
+        </view>
+        <view class="tag {{vote.type === 'double_three_quarter' ? 'tag-danger' : 'tag-primary'}}">
+          {{vote.type === 'double_three_quarter' ? '双¾表决' : '双过半表决'}}
+        </view>
+      </view>
+      <text class="vote-title">{{vote.title}}</text>
+      <text class="vote-desc">{{vote.description}}</text>
+      <view class="vote-info-row flex-row mt-20">
+        <view class="info-item-row">
+          <image class="icon-tiny" src="{{icons.clipboard}}" mode="aspectFit" />
+          <text class="info-item">{{vote.vote_id}}</text>
+        </view>
+        <view class="info-item-row">
+          <image class="icon-tiny" src="{{icons.user}}" mode="aspectFit" />
+          <text class="info-item">{{vote.creator}}</text>
+        </view>
+      </view>
+      <view class="vote-time-row flex-between mt-20">
+        <text class="time-item">开始: {{vote.start_time}}</text>
+        <text class="time-item">截止: {{vote.end_time}}</text>
+      </view>
+    </view>
+
+    <!-- 核验要求提示 -->
+    <view class="verify-notice card" wx:if="{{!userVerified && vote.status === 'active'}}">
+      <view class="notice-header flex-row">
+        <image class="icon-tiny" src="{{icons.warningOrange}}" mode="aspectFit" />
+        <text class="notice-title">身份核验未达标</text>
+      </view>
+      <text class="notice-desc">本次投票需要{{verifyText}}，您当前核验等级为{{user.verifyLevel || 'L' + user.verify_level}}，请先完成身份核验升级。</text>
+      <view class="btn-primary mt-20" bindtap="onUpgradeVerify">去核验升级</view>
+    </view>
+
+    <!-- 投票进度 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.chart}}" mode="aspectFit" />
+        <text>投票进度</text>
+      </view>
+      <view class="progress-section">
+        <view class="progress-row flex-between">
+          <text class="progress-label">人数参与率 ({{vote.participated_count}}/{{vote.total_count}})</text>
+          <text class="progress-value">{{percentCount}}%</text>
+        </view>
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{percentCount}}%"></view>
+        </view>
+        <view class="threshold-line" style="left: {{vote.threshold * 100}}%">
+          <text class="threshold-label">法定{{vote.threshold * 100}}%</text>
+        </view>
+      </view>
+      <view class="progress-section mt-40">
+        <view class="progress-row flex-between">
+          <text class="progress-label">面积参与率 ({{vote.participated_area}}㎡/{{vote.total_area}}㎡)</text>
+          <text class="progress-value">{{percentArea}}%</text>
+        </view>
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{percentArea}}%"></view>
+        </view>
+        <view class="threshold-line" style="left: {{vote.threshold * 100}}%">
+          <text class="threshold-label">法定{{vote.threshold * 100}}%</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 投票选项 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.vote}}" mode="aspectFit" />
+        <text>投票选项</text>
+      </view>
+      <view class="option-list">
+        <view class="option-item {{selectedOption === item ? 'option-selected' : ''}} {{hasVoted ? 'option-disabled' : ''}}" 
+          wx:for="{{vote.options}}" wx:key="*this"
+          bindtap="onSelectOption" data-option="{{item}}">
+          <view class="option-radio">
+            <view class="radio-inner" wx:if="{{selectedOption === item}}"></view>
+          </view>
+          <text class="option-text">{{item}}</text>
+          <!-- 结果展示 -->
+          <view class="option-result" wx:if="{{vote.status !== 'active' || hasVoted}}">
+            <text class="result-count">{{vote.results[item].count}}票</text>
+            <text class="result-area">{{vote.results[item].area}}㎡</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 核验等级说明 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.lock}}" mode="aspectFit" />
+        <text>核验等级说明</text>
+      </view>
+      <view class="level-list">
+        <view class="level-item {{item.level <= vote.require_level ? 'level-required' : ''}}" 
+          wx:for="{{verifyLevels}}" wx:key="level">
+          <view class="level-dot" style="background: {{item.level <= vote.require_level ? '#533afd' : '#ddd'}}"></view>
+          <view class="level-info flex-1">
+            <text class="level-label">{{item.label}}</text>
+            <text class="level-desc">{{item.desc}}</text>
+          </view>
+          <view class="tag {{item.level <= vote.require_level ? 'tag-primary' : ''}}" wx:if="{{item.level <= vote.require_level}}">
+            需要
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 区块链存证 -->
+    <view class="card" wx:if="{{hasVoted}}">
+      <view class="section-title">
+        <image class="icon" src="{{icons.link}}" mode="aspectFit" />
+        <text>区块链存证</text>
+      </view>
+      <view class="blockchain-info">
+        <view class="chain-row flex-between">
+          <text class="chain-label">存证哈希</text>
+          <text class="chain-value">{{blockchainHash}}</text>
+        </view>
+        <view class="chain-row flex-between">
+          <text class="chain-label">存证平台</text>
+          <text class="chain-value">腾讯云TBaaS</text>
+        </view>
+        <view class="chain-row flex-between">
+          <text class="chain-label">存证时间</text>
+          <text class="chain-value">2026-04-09 11:30:00</text>
+        </view>
+        <view class="btn-outline mt-20" bindtap="onViewBlockchain">验证存证</view>
+      </view>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="bottom-bar" wx:if="{{vote.status === 'active' && !hasVoted}}">
+      <view class="btn-primary submit-btn" bindtap="onSubmitVote">提交投票</view>
+      <view class="btn-outline share-btn" bindtap="onShareVote">分享投票</view>
+    </view>
+  </view>
+
+  <!-- 核验弹窗 -->
+  <view class="modal-mask" wx:if="{{showVerifyModal}}" bindtap="onCloseVerifyModal">
+    <view class="modal-content" catchtap="">
+      <text class="modal-title">身份核验未达标</text>
+      <text class="modal-desc">本次投票需要完成{{verifyText}}才能参与，您当前核验等级不足。</text>
+      <view class="modal-btns flex-row">
+        <view class="btn-outline flex-1" bindtap="onCloseVerifyModal">取消</view>
+        <view class="btn-primary flex-1" bindtap="onUpgradeVerify">去核验</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 投票成功弹窗 -->
+  <view class="modal-mask" wx:if="{{showResultModal}}" bindtap="onCloseResultModal">
+    <view class="modal-content" catchtap="">
+      <image class="modal-success-icon" src="{{icons.checkGreen}}" mode="aspectFit" />
+      <text class="modal-title">投票成功</text>
+      <text class="modal-desc">您的投票已提交，并已写入区块链存证。投票结果将在投票截止后公示。</text>
+      <view class="chain-hash-box">
+        <text class="chain-hash-label">存证哈希</text>
+        <text class="chain-hash-value">{{blockchainHash}}</text>
+      </view>
+      <view class="btn-primary mt-20" bindtap="onCloseResultModal">我知道了</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,33 @@
+/* pages/me/settings/settings.wxss - 设置 v3.0 · Stripe */
+.page-settings {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 60rpx;
+}
+
+.setting-item {
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 28rpx;
+  color: var(--heading);
+  font-weight: 400;
+}
+
+.setting-arrow {
+  font-size: 28rpx;
+  color: var(--text-disabled);
+}
+
+.version-info {
+  padding: 48rpx 0;
+  font-size: 24rpx;
+  color: var(--text-disabled);
+  font-weight: 400;
+}

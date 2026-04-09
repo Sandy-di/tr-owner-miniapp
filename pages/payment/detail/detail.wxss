@@ -1,0 +1,28 @@
+/* pages/payment/detail/detail.wxss - 缴费详情 v3.0 · Stripe */
+.page-payment-detail {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 60rpx;
+}
+
+.amount-header {
+  padding: 48rpx 28rpx;
+}
+
+.amount-label {
+  font-size: 28rpx;
+  color: var(--body);
+  display: block;
+  margin-bottom: 16rpx;
+  font-weight: 400;
+}
+
+.amount-value {
+  font-size: 64rpx;
+  font-weight: 300;
+  color: var(--heading);
+  display: block;
+  margin-bottom: 20rpx;
+  letter-spacing: -2rpx;
+  font-variant-numeric: tabular-nums;
+}

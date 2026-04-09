@@ -1,0 +1,72 @@
+<!--pages/vote/list/list.wxml-->
+<view class="page-vote-list">
+  <!-- Tab切换 -->
+  <view class="tab-bar flex-row">
+    <view class="tab-item {{currentTab === item.key ? 'tab-active' : ''}}" 
+      wx:for="{{tabs}}" wx:key="key"
+      bindtap="onTabChange" data-tab="{{item.key}}">
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 投票列表 -->
+  <view class="vote-list container">
+    <view class="vote-card card" 
+      wx:for="{{filteredVotes}}" wx:key="vote_id"
+      bindtap="onVoteTap" data-id="{{item.vote_id}}">
+      <!-- 状态标签 -->
+      <view class="flex-between mb-20">
+        <view class="tag {{item.status === 'active' ? 'tag-primary' : (item.status === 'published' ? 'tag-success' : 'tag-warning')}}">
+          {{item.statusText}}
+        </view>
+        <text class="vote-id">{{item.vote_id}}</text>
+      </view>
+      
+      <!-- 标题 -->
+      <text class="vote-title">{{item.title}}</text>
+      
+      <!-- 类型与核验要求 -->
+      <view class="vote-tags flex-row mt-20">
+        <view class="tag {{item.type === 'double_three_quarter' ? 'tag-danger' : 'tag-primary'}}">
+          {{item.type === 'double_three_quarter' ? '双¾表决' : '双过半表决'}}
+        </view>
+        <view class="tag tag-warning">需{{item.verifyText}}核验</view>
+      </view>
+      
+      <!-- 进度 -->
+      <view class="vote-progress mt-20">
+        <view class="progress-row flex-between">
+          <text class="progress-label">人数参与率</text>
+          <text class="progress-value">{{item.percentCount}}%</text>
+        </view>
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{item.percentCount}}%"></view>
+        </view>
+        <view class="progress-row flex-between mt-20">
+          <text class="progress-label">面积参与率</text>
+          <text class="progress-value">{{item.percentArea}}%</text>
+        </view>
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{item.percentArea}}%"></view>
+        </view>
+      </view>
+      
+      <!-- 截止时间 -->
+      <view class="vote-footer flex-between mt-20">
+        <text class="vote-deadline">截止: {{item.end_time}}</text>
+        <text class="vote-creator">{{item.creator}}</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{filteredVotes.length === 0}}">
+      <text class="empty-icon">🗳️</text>
+      <text class="empty-text">暂无投票</text>
+    </view>
+  </view>
+
+  <!-- 发起投票按钮（仅业委会可见） -->
+  <view class="fab-btn" bindtap="onCreateVote" wx:if="{{role === 'committee'}}">
+    <text>+</text>
+  </view>
+</view>

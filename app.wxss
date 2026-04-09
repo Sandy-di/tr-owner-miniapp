@@ -1,0 +1,553 @@
+/* app.wxss - 全局设计系统 v3.0 · Stripe Design Language */
+
+/* ==================== 设计令牌 ==================== */
+page {
+  /* 🟣 Stripe 核心色彩系统 */
+  --primary: #533afd;
+  --primary-hover: #4434d4;
+  --primary-deep: #2e2b8c;
+  --primary-light: #b9b9f9;
+  --primary-mid: #665efd;
+  --primary-bg: rgba(83, 58, 253, 0.05);
+  --primary-gradient: linear-gradient(135deg, #533afd 0%, #665efd 100%);
+  
+  --heading: #061b31;
+  --label: #273951;
+  --body: #64748d;
+
+  --success: #15be53;
+  --success-text: #108c3d;
+  --success-bg: rgba(21, 190, 83, 0.08);
+
+  --warning: #9b6829;
+  --warning-bg: rgba(155, 104, 41, 0.08);
+
+  --danger: #ea2261;
+  --danger-bg: rgba(234, 34, 97, 0.08);
+
+  --magenta: #f96bee;
+  --magenta-light: #ffd7ef;
+
+  --brand-dark: #1c1e54;
+  --dark-navy: #0d253d;
+
+  /* 中性色系统 — Stripe 风格 */
+  --text-primary: #061b31;
+  --text-secondary: #64748d;
+  --text-hint: #8896ab;
+  --text-disabled: #b9c4d0;
+
+  --bg-page: #f6f9fc;
+  --bg-card: #ffffff;
+  --bg-input: #f6f9fc;
+  --bg-hover: #eef2f7;
+
+  --border-color: #e5edf5;
+  --border-light: #f0f4f8;
+  --border-purple: #b9b9f9;
+  --border-soft-purple: #d6d9fc;
+
+  /* 圆角系统 — Stripe 保守圆角 */
+  --radius-xs: 4rpx;
+  --radius-sm: 8rpx;
+  --radius-md: 12rpx;
+  --radius-lg: 16rpx;
+  --radius-xl: 24rpx;
+  --radius-full: 999rpx;
+
+  /* 🌫️ Stripe 蓝色调阴影系统 */
+  --shadow-ambient: 0 6rpx 70rpx rgba(23, 23, 23, 0.06);
+  --shadow-card: 0 6rpx 70rpx rgba(23, 23, 23, 0.06);
+  --shadow-card-hover: 0 30rpx 90rpx -30rpx rgba(50, 50, 93, 0.25), 0 36rpx 72rpx -36rpx rgba(0, 0, 0, 0.1);
+  --shadow-float: 0 60rpx 90rpx -60rpx rgba(50, 50, 93, 0.25), 0 36rpx 72rpx -36rpx rgba(0, 0, 0, 0.1);
+  --shadow-modal: 0 28rpx 42rpx -28rpx rgba(3, 3, 39, 0.25), 0 16rpx 34rpx -16rpx rgba(0, 0, 0, 0.1);
+
+  /* 动画 */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 排版 — Stripe 风格 */
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==================== 通用容器 ==================== */
+.container {
+  padding: 24rpx;
+}
+
+/* ==================== 卡片系统 — Stripe 风格 ==================== */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: var(--shadow-card);
+  border: 1rpx solid var(--border-light);
+  transition: box-shadow var(--transition-normal), transform var(--transition-fast);
+}
+
+.card-hover:active {
+  box-shadow: var(--shadow-card-hover);
+  transform: scale(0.992);
+}
+
+/* ==================== 按钮系统 — Stripe ==================== */
+.btn-primary {
+  background: var(--primary);
+  color: #FFFFFF;
+  border-radius: var(--radius-sm);
+  padding: 24rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 500;
+  letter-spacing: 0;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-primary:active {
+  background: var(--primary-hover);
+  transform: translateY(2rpx);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2rpx solid var(--border-purple);
+  border-radius: var(--radius-sm);
+  padding: 22rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.btn-outline::after {
+  border: none;
+}
+
+.btn-outline:active {
+  background: var(--primary-bg);
+}
+
+.btn-sm {
+  font-size: 24rpx;
+  padding: 12rpx 28rpx;
+  border-radius: var(--radius-xs);
+}
+
+/* ==================== 标签系统 — Stripe ==================== */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: var(--radius-xs);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.tag-primary {
+  background: var(--primary-bg);
+  color: var(--primary);
+  border: 1rpx solid rgba(83, 58, 253, 0.15);
+}
+
+.tag-success {
+  background: rgba(21, 190, 83, 0.2);
+  color: var(--success-text);
+  border: 1rpx solid rgba(21, 190, 83, 0.4);
+}
+
+.tag-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border: 1rpx solid rgba(155, 104, 41, 0.2);
+}
+
+.tag-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1rpx solid rgba(234, 34, 97, 0.2);
+}
+
+/* ==================== 列表项 ==================== */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+/* ==================== 空状态 ==================== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-state .empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.5;
+}
+
+.empty-state .empty-text {
+  color: var(--text-hint);
+  font-size: 28rpx;
+  font-weight: 300;
+}
+
+/* ==================== SVG 图标通用样式 ==================== */
+.icon-inline {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 6rpx;
+  vertical-align: middle;
+}
+
+.icon-tiny {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 8rpx;
+  vertical-align: middle;
+}
+
+.icon-small {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.icon-medium {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.icon-large {
+  width: 56rpx;
+  height: 56rpx;
+}
+
+.icon-xl {
+  width: 72rpx;
+  height: 72rpx;
+}
+
+/* ==================== Section标题 — Stripe ==================== */
+.section-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--heading);
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.2rpx;
+}
+
+.section-title .icon {
+  margin-right: 10rpx;
+  width: 32rpx;
+  height: 32rpx;
+}
+
+/* ==================== 进度条 — Stripe ==================== */
+.progress-bar {
+  height: 10rpx;
+  background: var(--border-light);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar .progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-bar .progress-fill.success {
+  background: var(--success);
+}
+
+.progress-bar .progress-fill.warning {
+  background: var(--warning);
+}
+
+.progress-bar .progress-fill.danger {
+  background: var(--danger);
+}
+
+/* ==================== 分割线 ==================== */
+.divider {
+  height: 1rpx;
+  background: var(--border-light);
+  margin: 24rpx 0;
+}
+
+/* ==================== 表单 — Stripe ==================== */
+.form-group {
+  margin-bottom: 28rpx;
+}
+
+.form-label {
+  font-size: 26rpx;
+  color: var(--label);
+  margin-bottom: 12rpx;
+  display: block;
+  font-weight: 500;
+}
+
+.required {
+  color: var(--danger);
+}
+
+.form-input {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 22rpx 24rpx;
+  font-size: 28rpx;
+  color: var(--heading);
+  border: 2rpx solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3rpx rgba(83, 58, 253, 0.1);
+}
+
+.form-textarea {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 22rpx 24rpx;
+  font-size: 28rpx;
+  color: var(--heading);
+  width: 100%;
+  min-height: 200rpx;
+  box-sizing: border-box;
+  border: 2rpx solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+/* ==================== 信息行 — Stripe ==================== */
+.info-row {
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: var(--body);
+  font-weight: 400;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: var(--heading);
+  font-weight: 500;
+}
+
+.info-desc {
+  font-size: 26rpx;
+  color: var(--body);
+  line-height: 1.7;
+  display: block;
+  margin-top: 16rpx;
+}
+
+/* ==================== 弹窗系统 — Stripe ==================== */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(13, 37, 61, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 200ms ease;
+}
+
+.modal-content {
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 48rpx 40rpx;
+  width: 600rpx;
+  text-align: center;
+  box-shadow: var(--shadow-modal);
+  animation: slideUp 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40rpx) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: var(--heading);
+  display: block;
+  margin-bottom: 16rpx;
+  letter-spacing: -0.3rpx;
+}
+
+.modal-desc {
+  font-size: 26rpx;
+  color: var(--body);
+  display: block;
+  line-height: 1.7;
+  margin-bottom: 24rpx;
+}
+
+.modal-btns {
+  gap: 20rpx;
+  margin-top: 24rpx;
+}
+
+/* ==================== Tab 栏 — Stripe ==================== */
+.tab-bar {
+  background: #FFFFFF;
+  padding: 0 24rpx;
+  display: flex;
+  border-bottom: 1rpx solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 28rpx;
+  color: var(--body);
+  position: relative;
+  transition: color var(--transition-fast);
+  font-weight: 400;
+}
+
+.tab-active {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 6rpx;
+  background: var(--primary);
+  border-radius: 3rpx;
+}
+
+/* ==================== FAB按钮 — Stripe ==================== */
+.fab-btn {
+  position: fixed;
+  right: 40rpx;
+  bottom: 160rpx;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: var(--radius-lg);
+  background: var(--primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52rpx;
+  box-shadow: var(--shadow-float);
+  z-index: 50;
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.fab-btn:active {
+  transform: scale(0.92);
+  background: var(--primary-hover);
+}
+
+/* ==================== 底部操作栏 ==================== */
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #FFFFFF;
+  padding: 20rpx 24rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 20rpx rgba(50, 50, 93, 0.06);
+  display: flex;
+  gap: 20rpx;
+  z-index: 50;
+}
+
+/* ==================== Flex 工具类 ==================== */
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-8 { margin-top: 8rpx; }
+.mt-12 { margin-top: 12rpx; }
+.mt-20 { margin-top: 20rpx; }
+.mt-24 { margin-top: 24rpx; }
+.mt-32 { margin-top: 32rpx; }
+.mt-40 { margin-top: 40rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+.mb-40 { margin-bottom: 40rpx; }

@@ -1,0 +1,74 @@
+/* pages/vote/list/list.wxss - 投票列表 v3.0 · Stripe */
+.page-vote-list {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 40rpx;
+}
+
+.vote-list {
+
+}
+
+.vote-card {
+  transition: transform var(--transition-fast), box-shadow var(--transition-normal);
+}
+
+.vote-card:active {
+  transform: scale(0.992);
+  box-shadow: var(--shadow-card);
+}
+
+.vote-id {
+  font-size: 22rpx;
+  color: var(--body);
+  font-variant-numeric: tabular-nums;
+}
+
+.vote-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--heading);
+  display: block;
+  line-height: 1.5;
+  letter-spacing: -0.2rpx;
+}
+
+.vote-tags {
+  gap: 12rpx;
+}
+
+.vote-progress {
+
+}
+
+.progress-row {
+  margin-bottom: 8rpx;
+}
+
+.progress-label {
+  font-size: 24rpx;
+  color: var(--body);
+  font-weight: 400;
+}
+
+.progress-value {
+  font-size: 24rpx;
+  color: var(--primary);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.vote-footer {
+
+}
+
+.vote-deadline {
+  font-size: 24rpx;
+  color: var(--body);
+  font-weight: 400;
+}
+
+.vote-creator {
+  font-size: 24rpx;
+  color: var(--body);
+}

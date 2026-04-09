@@ -1,0 +1,12 @@
+# 微信开发者工具
+project.private.config.json
+
+# macOS
+.DS_Store
+._*
+
+# WorkBuddy 内部文件
+.workbuddy/
+
+# Node
+node_modules/

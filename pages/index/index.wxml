@@ -1,0 +1,159 @@
+<!--pages/index/index.wxml-->
+<view class="page-index">
+  <!-- 顶部信息栏 -->
+  <view class="header">
+    <view class="header-bg"></view>
+    <view class="header-content">
+      <view class="user-info flex-row">
+        <view class="avatar">
+          <text class="avatar-text">{{user.name[0] || '业'}}</text>
+        </view>
+        <view class="user-detail flex-col">
+          <text class="user-name">{{user.name || '业主'}}</text>
+          <view class="verify-badge flex-row" bindtap="onUpgradeVerify">
+            <view class="verify-dot" style="background:{{user.verify_level >= 3 ? '#00B578' : '#FF8F1F'}}"></view>
+            <text class="verify-text">{{verifyLevelText}}</text>
+            <text class="verify-arrow" wx:if="{{user.verify_level < 4}}">去升级 ›</text>
+          </view>
+        </view>
+      </view>
+      <view class="community-badge">
+        <image class="icon-inline" src="{{icons.location}}" mode="aspectFit" />
+        <text class="community-name">{{user.community || 'TR智慧社区'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-row flex-row">
+    <view class="stat-card" bindtap="onQuickAction" data-url="/pages/vote/list/list">
+      <view class="stat-icon stat-icon-primary">
+        <image class="stat-icon-img" src="{{icons.vote}}" mode="aspectFit" />
+      </view>
+      <text class="stat-num stat-num-primary">{{activeVotes}}</text>
+      <text class="stat-label">进行中投票</text>
+    </view>
+    <view class="stat-card" bindtap="onQuickAction" data-url="/pages/repair/list/list">
+      <view class="stat-icon stat-icon-warning">
+        <image class="stat-icon-img" src="{{icons.wrench}}" mode="aspectFit" />
+      </view>
+      <text class="stat-num stat-num-warning">{{pendingOrders}}</text>
+      <text class="stat-label">待处理工单</text>
+    </view>
+    <view class="stat-card" bindtap="onQuickAction" data-url="/pages/payment/list/list">
+      <view class="stat-icon stat-icon-danger">
+        <image class="stat-icon-img" src="{{icons.money}}" mode="aspectFit" />
+      </view>
+      <text class="stat-num stat-num-danger">{{unpaidPayments}}</text>
+      <text class="stat-label">待缴费用</text>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="card quick-actions">
+    <view class="section-title">
+      <text>快捷操作</text>
+    </view>
+    <view class="action-grid">
+      <view class="action-item" 
+        wx:for="{{quickActions}}" 
+        wx:key="title"
+        bindtap="onQuickAction" 
+        data-url="{{item.url}}">
+        <view class="action-icon" style="background: {{item.bgColor || 'rgba(83,58,253,0.05)'}}">
+          <image class="action-icon-img" src="{{icons[item.iconKey]}}" mode="aspectFit" />
+        </view>
+        <text class="action-title">{{item.title}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 当前投票 -->
+  <view class="card vote-section" wx:if="{{currentVote}}">
+    <view class="section-title">
+      <text>当前投票</text>
+      <view class="tag tag-primary" style="margin-left:auto; font-size:20rpx">进行中</view>
+    </view>
+    <view class="vote-card" bindtap="onViewVote" data-id="{{currentVote.vote_id}}">
+      <view class="vote-card-top">
+        <text class="vote-title">{{currentVote.title}}</text>
+        <view class="vote-tags flex-row mt-12">
+          <view class="tag {{currentVote.type === 'double_three_quarter' ? 'tag-danger' : 'tag-primary'}}" style="font-size:20rpx">
+            {{currentVote.type === 'double_three_quarter' ? '双¾表决' : '双过半表决'}}
+          </view>
+          <view class="vote-level-tag tag tag-warning" style="font-size:20rpx">需L{{currentVote.require_level}}核验</view>
+        </view>
+      </view>
+      <view class="vote-progress mt-24">
+        <view class="progress-section">
+          <view class="progress-row flex-between">
+            <view class="progress-label-row">
+              <image class="icon-tiny" src="{{icons.users}}" mode="aspectFit" />
+              <text class="progress-label">人数参与率</text>
+            </view>
+            <text class="progress-value">{{percentCount}}%</text>
+          </view>
+          <view class="progress-bar mt-8">
+            <view class="progress-fill" style="width: {{percentCount}}%"></view>
+          </view>
+        </view>
+        <view class="progress-section mt-20">
+          <view class="progress-row flex-between">
+            <view class="progress-label-row">
+              <image class="icon-tiny" src="{{icons.ruler}}" mode="aspectFit" />
+              <text class="progress-label">面积参与率</text>
+            </view>
+            <text class="progress-value">{{percentArea}}%</text>
+          </view>
+          <view class="progress-bar mt-8">
+            <view class="progress-fill" style="width: {{percentArea}}%"></view>
+          </view>
+        </view>
+      </view>
+      <view class="vote-deadline flex-row mt-24">
+        <image class="icon-tiny" src="{{icons.clock}}" mode="aspectFit" />
+        <text class="deadline-text">截止: {{currentVote.end_time}}</text>
+        <text class="deadline-arrow">查看详情 ›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 公告 -->
+  <view class="card">
+    <view class="section-title">
+      <text>社区公告</text>
+    </view>
+    <view class="announcement-list">
+      <view class="announcement-item" 
+        wx:for="{{announcements}}" 
+        wx:key="id"
+        bindtap="onViewAnnouncement"
+        data-type="{{item.type}}"
+        data-id="{{item.id}}">
+        <view class="announcement-dot" style="background: {{item.type === 'vote' ? 'var(--primary)' : 'var(--warning)'}}"></view>
+        <text class="announcement-title flex-1">{{item.title}}</text>
+        <text class="announcement-time">{{item.time}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近工单 -->
+  <view class="card" wx:if="{{recentOrders.length > 0}}">
+    <view class="section-title">
+      <text>最近工单</text>
+      <text class="link" bindtap="onQuickAction" data-url="/pages/repair/list/list" style="margin-left:auto">查看全部 ›</text>
+    </view>
+    <view class="order-list">
+      <view class="order-item" wx:for="{{recentOrders}}" wx:key="order_id">
+        <view class="order-header flex-between">
+          <text class="order-title">{{item.title}}</text>
+          <view class="tag tag-primary" style="font-size:20rpx">{{item.status === 'processing' ? '处理中' : '已接单'}}</view>
+        </view>
+        <view class="order-meta flex-row mt-8">
+          <text class="order-id">{{item.order_id}}</text>
+          <text class="order-time">{{item.sla_start}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,97 @@
+<!--pages/repair/create/create.wxml-->
+<view class="page-repair-create">
+  <view class="container">
+    <!-- 基本信息 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.clipboard}}" mode="aspectFit" />
+        <text>报修信息</text>
+      </view>
+      
+      <view class="form-group">
+        <text class="form-label">报修标题 <text class="required">*</text></text>
+        <input class="form-input" placeholder="如：3号楼电梯异响" value="{{form.title}}" bindinput="onTitleInput" maxlength="30" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">故障类别 <text class="required">*</text></text>
+        <picker mode="selector" range="{{categories}}" bindchange="onCategoryChange">
+          <view class="form-input picker-input flex-between">
+            <text class="{{form.category ? '' : 'placeholder'}}">{{form.category || '请选择故障类别'}}</text>
+            <text class="picker-arrow">›</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">故障描述 <text class="required">*</text></text>
+        <textarea class="form-textarea" placeholder="请详细描述故障情况，如位置、现象、影响范围等" value="{{form.description}}" bindinput="onDescInput" maxlength="300" />
+      </view>
+    </view>
+
+    <!-- 现场照片 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.camera}}" mode="aspectFit" />
+        <text>现场照片</text>
+      </view>
+      <view class="image-grid">
+        <view class="image-item" wx:for="{{imageList}}" wx:key="*this">
+          <image class="preview-image" src="{{item}}" mode="aspectFill" />
+          <view class="remove-btn" bindtap="onRemoveImage" data-index="{{index}}">
+            <image class="remove-icon" src="{{icons.close}}" mode="aspectFit" />
+          </view>
+        </view>
+        <view class="image-add" bindtap="onChooseImage" wx:if="{{imageList.length < 3}}">
+          <image class="add-icon" src="{{icons.plus}}" mode="aspectFit" />
+          <text class="add-text">添加照片</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 语音描述 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.mic}}" mode="aspectFit" />
+        <text>语音描述</text>
+      </view>
+      <view class="voice-btn" bindtap="onRecordVoice">
+        <image class="voice-icon" src="{{icons.mic}}" mode="aspectFit" />
+        <text class="voice-text">{{hasVoice ? '已录音，点击重录' : '点击录音描述故障'}}</text>
+      </view>
+    </view>
+
+    <!-- 预约时间 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.clock}}" mode="aspectFit" />
+        <text>预约上门时间</text>
+      </view>
+      
+      <view class="form-group">
+        <text class="form-label">选择日期</text>
+        <view class="date-list flex-row">
+          <view class="date-item {{form.appointment_date === item.value ? 'date-active' : ''}}" 
+            wx:for="{{dateOptions}}" wx:key="value"
+            bindtap="onDateSelect" data-value="{{item.value}}">
+            <text class="date-label">{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-group" wx:if="{{form.appointment_date}}">
+        <text class="form-label">选择时段</text>
+        <view class="time-list flex-row">
+          <view class="time-item {{selectedTimeSlot === item ? 'time-active' : ''}}" 
+            wx:for="{{timeSlots}}" wx:key="*this"
+            bindtap="onTimeSelect" data-value="{{item}}">
+            <text>{{item}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="btn-primary mt-40 mb-40" bindtap="onSubmit">提交报修</view>
+  </view>
+</view>

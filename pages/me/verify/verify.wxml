@@ -1,0 +1,102 @@
+<!--pages/me/verify/verify.wxml-->
+<view class="page-verify">
+  <view class="container">
+    <!-- 当前等级 -->
+    <view class="current-level card text-center">
+      <image class="level-icon-img" src="{{currentLevel >= 4 ? icons.trophy : icons.lock}}" mode="aspectFit" />
+      <text class="level-current">当前核验等级</text>
+      <text class="level-value">L{{currentLevel}} {{currentLevel >= 4 ? '最高等级' : verifyLevelText(currentLevel)}}</text>
+      <view class="level-progress">
+        <view class="progress-bar" style="height:16rpx;border-radius:8rpx">
+          <view class="progress-fill" style="width: {{currentLevel * 25}}%; background: linear-gradient(90deg, #533afd, #665efd)"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 核验等级列表 -->
+    <view class="level-list">
+      <view class="level-card card" wx:for="{{levels}}" wx:key="level">
+        <view class="level-header flex-row">
+          <image class="level-icon-text" src="{{icons[item.iconKey]}}" mode="aspectFit" />
+          <view class="level-info flex-1">
+            <text class="level-label">{{item.label}}</text>
+            <text class="level-desc">{{item.desc}}</text>
+          </view>
+          <view class="level-status">
+            <view class="status-completed" wx:if="{{item.status === 'completed'}}">
+              <image class="status-icon" src="{{icons.checkGreen}}" mode="aspectFit" />
+              <text>已完成</text>
+            </view>
+            <view class="status-current" wx:if="{{item.status === 'current'}}">
+              <image class="status-icon" src="{{icons.current}}" mode="aspectFit" />
+              <text>待核验</text>
+            </view>
+            <view class="status-locked" wx:if="{{item.status === 'locked'}}">
+              <image class="status-icon" src="{{icons.unlock}}" mode="aspectFit" />
+              <text>未解锁</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- L3 核验表单 -->
+        <view class="verify-form" wx:if="{{item.level === 3 && item.status === 'current'}}">
+          <view class="divider mb-20"></view>
+          <view class="form-group">
+            <text class="form-label">真实姓名 <text class="required">*</text></text>
+            <input class="form-input" placeholder="请输入真实姓名" value="{{l3Form.realName}}" bindinput="onL3NameInput" />
+          </view>
+          <view class="form-group">
+            <text class="form-label">身份证号 <text class="required">*</text></text>
+            <input class="form-input" placeholder="请输入身份证号码" type="idcard" value="{{l3Form.idCard}}" bindinput="onL3IdCardInput" maxlength="18" />
+          </view>
+          <view class="form-group">
+            <text class="form-label">房产证编号 <text class="required">*</text></text>
+            <input class="form-input" placeholder="请输入房产证编号" value="{{l3Form.propertyCertNo}}" bindinput="onL3CertInput" />
+          </view>
+          <view class="verify-tip">
+            <image class="icon-tiny" src="{{icons.warningOrange}}" mode="aspectFit" />
+            <text>您的个人信息将进行AES-256加密存储，仅用于身份核验，详情请查看《隐私协议》</text>
+          </view>
+          <view class="btn-primary mt-20" bindtap="onSubmitL3">提交核验</view>
+        </view>
+
+        <!-- L4 人脸核身 -->
+        <view class="verify-form" wx:if="{{item.level === 4 && item.status === 'current'}}">
+          <view class="divider mb-20"></view>
+          <view class="face-verify flex-col flex-center">
+            <image class="face-icon" src="{{icons.user}}" mode="aspectFit" />
+            <text class="face-desc">点击开始人脸识别验证</text>
+            <text class="face-tip">需在光线充足环境下进行</text>
+          </view>
+          <view class="btn-primary mt-20" bindtap="onStartL4">开始人脸核身</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 核验说明 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.book}}" mode="aspectFit" />
+        <text>核验等级说明</text>
+      </view>
+      <view class="explain-list">
+        <view class="explain-item">
+          <text class="explain-title">L1 手机号验证</text>
+          <text class="explain-desc">绑定手机号即可，适用于基础功能使用</text>
+        </view>
+        <view class="explain-item">
+          <text class="explain-title">L2 房产信息匹配</text>
+          <text class="explain-desc">房产证信息与物业系统记录匹配</text>
+        </view>
+        <view class="explain-item">
+          <text class="explain-title">L3 实名认证</text>
+          <text class="explain-desc">姓名+身份证+房产证三重验证，参与双过半投票所需</text>
+        </view>
+        <view class="explain-item">
+          <text class="explain-title">L4 人脸核身</text>
+          <text class="explain-desc">接入腾讯云慧眼FaceID，参与双¾表决所需</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

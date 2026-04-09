@@ -1,0 +1,295 @@
+/* pages/vote/detail/detail.wxss - 投票详情 v3.0 · Stripe */
+.page-vote-detail {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 180rpx;
+}
+
+.vote-header {
+
+}
+
+.vote-title {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: var(--heading);
+  display: block;
+  margin-bottom: 12rpx;
+  line-height: 1.4;
+  letter-spacing: -0.3rpx;
+}
+
+.vote-desc {
+  font-size: 26rpx;
+  color: var(--body);
+  display: block;
+  line-height: 1.7;
+}
+
+.vote-info-row {
+  gap: 24rpx;
+}
+
+.info-item-row {
+  display: flex;
+  align-items: center;
+}
+
+.info-item {
+  font-size: 24rpx;
+  color: var(--body);
+  font-weight: 400;
+}
+
+.vote-time-row {
+
+}
+
+.time-item {
+  font-size: 24rpx;
+  color: var(--body);
+  font-weight: 400;
+}
+
+/* 核验提示 */
+.verify-notice {
+  background: rgba(155, 104, 41, 0.04);
+  border: 1rpx solid rgba(155, 104, 41, 0.15);
+}
+
+.notice-header {
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.notice-icon {
+  margin-right: 10rpx;
+}
+
+.notice-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--warning);
+}
+
+.notice-desc {
+  font-size: 26rpx;
+  color: var(--label);
+  line-height: 1.6;
+}
+
+/* 投票进度 */
+.progress-section {
+  position: relative;
+}
+
+.threshold-line {
+  position: absolute;
+  top: 40rpx;
+  width: 2rpx;
+  height: 16rpx;
+  background: var(--danger);
+}
+
+.threshold-label {
+  position: absolute;
+  top: -16rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18rpx;
+  color: var(--danger);
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* 投票选项 */
+.option-list {
+
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-bottom: 16rpx;
+  transition: all var(--transition-fast);
+  background: #FFFFFF;
+}
+
+.option-selected {
+  border-color: var(--primary);
+  background: rgba(83, 58, 253, 0.03);
+  box-shadow: 0 0 0 3rpx rgba(83, 58, 253, 0.08);
+}
+
+.option-disabled {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.option-radio {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 2rpx solid var(--border-color);
+  margin-right: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.option-selected .option-radio {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+
+.radio-inner {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.option-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--heading);
+  font-weight: 400;
+}
+
+.option-result {
+  display: flex;
+  gap: 20rpx;
+}
+
+.result-count {
+  font-size: 24rpx;
+  color: var(--primary);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-area {
+  font-size: 24rpx;
+  color: var(--body);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 核验等级 */
+.level-list {
+
+}
+
+.level-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.level-item:last-child {
+  border-bottom: none;
+}
+
+.level-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.level-info {
+
+}
+
+.level-label {
+  font-size: 26rpx;
+  color: var(--heading);
+  display: block;
+  font-weight: 500;
+}
+
+.level-desc {
+  font-size: 22rpx;
+  color: var(--body);
+  display: block;
+  margin-top: 4rpx;
+}
+
+/* 区块链 */
+.blockchain-info {
+
+}
+
+.chain-row {
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.chain-row:last-of-type {
+  border-bottom: none;
+}
+
+.chain-label {
+  font-size: 24rpx;
+  color: var(--body);
+  font-weight: 400;
+}
+
+.chain-value {
+  font-size: 24rpx;
+  color: var(--heading);
+  font-family: 'SF Mono', 'Menlo', monospace;
+  font-weight: 500;
+}
+
+.chain-hash-box {
+  background: var(--bg-page);
+  border-radius: var(--radius-sm);
+  padding: 24rpx;
+  text-align: center;
+  margin-top: 20rpx;
+  border: 1rpx solid var(--border-light);
+}
+
+.chain-hash-label {
+  font-size: 22rpx;
+  color: var(--body);
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.chain-hash-value {
+  font-size: 24rpx;
+  color: var(--primary);
+  font-family: 'SF Mono', 'Menlo', monospace;
+  word-break: break-all;
+  font-weight: 500;
+}
+
+/* 底部操作栏 */
+.submit-btn {
+  flex: 2;
+}
+
+.share-btn {
+  flex: 1;
+}
+
+/* 成功弹窗 */
+.modal-success-icon {
+  width: 80rpx;
+  height: 80rpx;
+  display: block;
+  margin: 0 auto 20rpx;
+}
+
+.modal-btns {
+  gap: 20rpx;
+  margin-top: 20rpx;
+}

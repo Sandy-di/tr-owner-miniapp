@@ -1,0 +1,184 @@
+/* pages/me/me.wxss - 个人中心 v3.0 · Stripe */
+.page-me {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 40rpx;
+}
+
+.user-header {
+  position: relative;
+}
+
+.user-bg {
+  height: 320rpx;
+  background: linear-gradient(155deg, var(--brand-dark) 0%, #2a2d7a 40%, #3d40a8 100%);
+}
+
+.user-card {
+  position: relative;
+  z-index: 1;
+  margin: -180rpx 24rpx 0;
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 36rpx;
+  box-shadow: var(--shadow-card-hover);
+  border: 1rpx solid var(--border-light);
+}
+
+.user-row {
+  align-items: flex-start;
+}
+
+.user-avatar {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: var(--radius-lg);
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  font-size: 44rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+.user-info {
+
+}
+
+.user-name {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: var(--heading);
+  display: block;
+  margin-bottom: 6rpx;
+  letter-spacing: -0.3rpx;
+}
+
+.user-phone {
+  font-size: 26rpx;
+  color: var(--body);
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.user-community {
+  font-size: 24rpx;
+  color: var(--body);
+  margin-top: 6rpx;
+}
+
+.verify-badge {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+  border-radius: var(--radius-full);
+  background: var(--bg-input);
+  border: 1rpx solid var(--border-light);
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.verify-badge:active {
+  background: var(--bg-hover);
+}
+
+.verify-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  margin-right: 8rpx;
+}
+
+.verify-text {
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+.verify-arrow {
+  font-size: 20rpx;
+  color: var(--body);
+  margin-left: 6rpx;
+}
+
+/* 房产信息 */
+.property-info {
+  margin-top: 28rpx;
+  padding-top: 28rpx;
+  border-top: 1rpx solid var(--border-light);
+}
+
+.property-item {
+  flex: 1;
+  text-align: center;
+}
+
+.property-value {
+  font-size: 26rpx;
+  color: var(--heading);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.property-label {
+  font-size: 22rpx;
+  color: var(--body);
+  display: block;
+  font-weight: 400;
+}
+
+.property-divider {
+  width: 1rpx;
+  height: 56rpx;
+  background: var(--border-light);
+}
+
+/* 菜单 */
+.menu-list {
+  margin-top: 20rpx;
+}
+
+.menu-item {
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+  transition: background var(--transition-fast);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background: var(--bg-hover);
+}
+
+.menu-icon-img {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+}
+
+.menu-title {
+  font-size: 28rpx;
+  color: var(--heading);
+  font-weight: 400;
+}
+
+.menu-badge {
+  font-size: 20rpx;
+  margin-right: 10rpx;
+}
+
+.menu-arrow {
+  font-size: 28rpx;
+  color: var(--text-disabled);
+  margin-left: 8rpx;
+}

@@ -1,0 +1,118 @@
+<!--pages/repair/detail/detail.wxml-->
+<view class="page-repair-detail" wx:if="{{order}}">
+  <view class="container">
+    <!-- 状态头部 -->
+    <view class="status-header card">
+      <view class="status-badge" style="background: {{orderStatusColor(order.status)}}22; color: {{orderStatusColor(order.status)}}">
+        {{orderStatusText(order.status)}}
+      </view>
+      <text class="order-title">{{order.title}}</text>
+      <text class="order-id">{{order.order_id}}</text>
+    </view>
+
+    <!-- 进度步骤 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.chart}}" mode="aspectFit" />
+        <text>工单进度</text>
+      </view>
+      <view class="steps">
+        <view class="step-item {{item.completed ? 'step-completed' : ''}} {{item.active ? 'step-active' : ''}}" 
+          wx:for="{{statusSteps}}" wx:key="key">
+          <view class="step-icon">
+            <image class="step-icon-img" src="{{icons[item.iconKey]}}" mode="aspectFit" />
+          </view>
+          <view class="step-line" wx:if="{{index < statusSteps.length - 1}}"></view>
+          <text class="step-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 报修信息 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.clipboard}}" mode="aspectFit" />
+        <text>报修信息</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">故障类别</text>
+        <text class="info-value">{{order.category}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">报修位置</text>
+        <text class="info-value">{{order.building}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">预约时间</text>
+        <text class="info-value">{{order.appointment_time}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">提交时间</text>
+        <text class="info-value">{{order.sla_start}}</text>
+      </view>
+      <view class="divider"></view>
+      <text class="info-desc">{{order.description}}</text>
+    </view>
+
+    <!-- 维修人员 -->
+    <view class="card" wx:if="{{order.staff_name}}">
+      <view class="section-title">
+        <image class="icon" src="{{icons.worker}}" mode="aspectFit" />
+        <text>维修人员</text>
+      </view>
+      <view class="staff-info flex-row">
+        <view class="staff-avatar">
+          <text class="staff-avatar-text">{{order.staff_name[0]}}</text>
+        </view>
+        <view class="staff-detail flex-1">
+          <text class="staff-name">{{order.staff_name}}</text>
+          <text class="staff-time">接单时间: {{order.accept_time}}</text>
+        </view>
+        <view class="call-btn" bindtap="onCallStaff">
+          <image class="call-icon" src="{{icons.phone}}" mode="aspectFit" />
+          <text>联系</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 评价区域 -->
+    <view class="card" wx:if="{{order.status === 'pending_check'}}">
+      <view class="section-title">
+        <image class="icon" src="{{icons.star}}" mode="aspectFit" />
+        <text>验收评价</text>
+      </view>
+      <text class="evaluate-desc">维修已完成，请对本次服务进行评价</text>
+      <view class="btn-primary mt-20" bindtap="onShowRating">去评价</view>
+      <view class="btn-outline mt-20" bindtap="onApplyRework" style="color: var(--danger); border-color: var(--danger);">申请复修</view>
+    </view>
+
+    <!-- 已评价展示 -->
+    <view class="card" wx:if="{{order.status === 'completed' && order.rating}}">
+      <view class="section-title">
+        <image class="icon" src="{{icons.star}}" mode="aspectFit" />
+        <text>服务评价</text>
+      </view>
+      <view class="rating-display flex-row">
+        <image class="star-icon" src="{{index < order.rating ? icons.star : icons.starEmpty}}" wx:for="{{5}}" wx:key="*this" mode="aspectFit" />
+      </view>
+      <text class="rating-comment" wx:if="{{order.comment}}">{{order.comment}}</text>
+    </view>
+  </view>
+
+  <!-- 评价弹窗 -->
+  <view class="modal-mask" wx:if="{{showRatingModal}}" bindtap="onShowRating">
+    <view class="modal-content" catchtap="">
+      <text class="modal-title">服务评价</text>
+      <view class="star-rating flex-row">
+        <text class="star-btn {{rating >= index + 1 ? 'star-active' : ''}}" 
+          wx:for="{{5}}" wx:key="*this"
+          bindtap="onRateStar" data-star="{{index + 1}}">★</text>
+      </view>
+      <textarea class="rating-textarea" placeholder="请输入评价内容（选填）" value="{{comment}}" bindinput="onCommentInput" maxlength="200" />
+      <view class="modal-btns flex-row mt-20">
+        <view class="btn-outline flex-1" bindtap="onShowRating">取消</view>
+        <view class="btn-primary flex-1" bindtap="onSubmitRating">提交评价</view>
+      </view>
+    </view>
+  </view>
+</view>

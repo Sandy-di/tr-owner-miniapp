@@ -1,0 +1,180 @@
+/* pages/vote/create/create.wxss - 发起投票 v3.0 · Stripe */
+.page-vote-create {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 60rpx;
+}
+
+/* 类型选择 */
+.type-list {
+
+}
+
+.type-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-bottom: 16rpx;
+  transition: all var(--transition-fast);
+  background: #FFFFFF;
+}
+
+.type-active {
+  border-color: var(--primary);
+  background: rgba(83, 58, 253, 0.03);
+  box-shadow: 0 0 0 3rpx rgba(83, 58, 253, 0.08);
+}
+
+.type-radio {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  border: 2rpx solid var(--border-color);
+  margin-right: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.type-active .type-radio {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+
+.radio-dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.type-info {
+  flex: 1;
+}
+
+.type-label {
+  font-size: 28rpx;
+  color: var(--heading);
+  font-weight: 500;
+  display: block;
+}
+
+.type-desc {
+  font-size: 22rpx;
+  color: var(--body);
+  display: block;
+  margin-top: 6rpx;
+}
+
+/* 核验等级 */
+.level-select {
+
+}
+
+.level-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-bottom: 16rpx;
+  position: relative;
+  transition: all var(--transition-fast);
+  background: #FFFFFF;
+}
+
+.level-active {
+  border-color: var(--primary);
+  background: rgba(83, 58, 253, 0.03);
+}
+
+.level-label {
+  font-size: 28rpx;
+  color: var(--heading);
+  font-weight: 500;
+  display: block;
+}
+
+.level-desc {
+  font-size: 22rpx;
+  color: var(--body);
+  display: block;
+  margin-top: 6rpx;
+}
+
+.check-icon {
+  color: var(--primary);
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-left: auto;
+}
+
+/* 投票选项 */
+.option-input-row {
+  margin-bottom: 16rpx;
+  align-items: center;
+}
+
+.option-index {
+  font-size: 28rpx;
+  color: var(--body);
+  margin-right: 12rpx;
+  width: 36rpx;
+  font-weight: 500;
+}
+
+.remove-btn {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 16rpx;
+  margin-left: 8rpx;
+}
+
+.remove-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.add-option-btn {
+  text-align: center;
+  padding: 24rpx;
+  color: var(--primary);
+  font-size: 28rpx;
+  border: 2rpx dashed var(--border-purple);
+  border-radius: var(--radius-sm);
+  margin-top: 8rpx;
+  font-weight: 400;
+  transition: all var(--transition-fast);
+}
+
+.add-option-btn:active {
+  background: var(--primary-bg);
+}
+
+/* 投票时长 */
+.duration-list {
+  gap: 16rpx;
+}
+
+.duration-item {
+  flex: 1;
+  text-align: center;
+  padding: 22rpx 0;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 28rpx;
+  color: var(--body);
+  font-weight: 400;
+  transition: all var(--transition-fast);
+}
+
+.duration-active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(83, 58, 253, 0.05);
+  font-weight: 500;
+}

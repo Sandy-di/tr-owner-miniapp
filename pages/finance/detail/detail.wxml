@@ -1,0 +1,90 @@
+<!--pages/finance/detail/detail.wxml-->
+<view class="page-finance-detail" wx:if="{{record}}">
+  <view class="container">
+    <!-- 金额头部 -->
+    <view class="amount-header card text-center">
+      <text class="amount-type">{{record.type === 'income' ? '📈 收入' : '📉 支出'}}</text>
+      <text class="amount-value {{record.type === 'income' ? 'income' : 'expense'}}">
+        {{record.type === 'income' ? '+' : '-'}}{{record.amountText}}
+      </text>
+      <text class="amount-title">{{record.title}}</text>
+      <view class="tag {{record.status === 'published' ? 'tag-success' : 'tag-warning'}}" style="margin-top:12rpx">
+        {{record.status === 'published' ? '已审批公示' : '待审批'}}
+      </view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="card">
+      <view class="section-title">
+        <text class="icon">📄</text>
+        <text>明细信息</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">编号</text>
+        <text class="info-value">{{record.finance_id}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">分类</text>
+        <text class="info-value">{{record.category}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">日期</text>
+        <text class="info-value">{{record.date}}</text>
+      </view>
+      <view class="divider"></view>
+      <text class="info-desc">{{record.description}}</text>
+    </view>
+
+    <!-- 审批联署 -->
+    <view class="card">
+      <view class="section-title">
+        <text class="icon">✍️</text>
+        <text>审批联署</text>
+      </view>
+      <view class="approval-list">
+        <view class="approval-item flex-row" wx:for="{{record.approved_by}}" wx:key="*this">
+          <view class="approval-avatar">
+            <text>{{item[0]}}</text>
+          </view>
+          <text class="approval-name flex-1">{{item}}</text>
+          <text class="approval-status">✅ 已签批</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 凭证附件 -->
+    <view class="card">
+      <view class="section-title">
+        <text class="icon">📎</text>
+        <text>凭证附件</text>
+      </view>
+      <view class="voucher-list">
+        <view class="voucher-item" wx:for="{{record.vouchers}}" wx:key="*this" bindtap="onPreviewVoucher">
+          <text class="voucher-icon">{{item.endsWith('.pdf') ? '📑' : '🖼️'}}</text>
+          <text class="voucher-name flex-1">{{item}}</text>
+          <text class="voucher-action">预览 ›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 区块链存证 -->
+    <view class="card">
+      <view class="section-title">
+        <text class="icon">🔗</text>
+        <text>存证信息</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">存证平台</text>
+        <text class="info-value">腾讯云TBaaS</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">存证哈希</text>
+        <text class="info-value hash">0xa3f8e2...7b9c</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">存证时间</text>
+        <text class="info-value">{{record.date}} 12:00:00</text>
+      </view>
+    </view>
+  </view>
+</view>

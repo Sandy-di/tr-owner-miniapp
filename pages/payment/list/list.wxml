@@ -1,0 +1,49 @@
+<!--pages/payment/list/list.wxml-->
+<view class="page-payment-list">
+  <!-- 待缴汇总 -->
+  <view class="summary-header">
+    <view class="summary-bg"></view>
+    <view class="summary-content">
+      <text class="summary-label">待缴金额</text>
+      <text class="summary-amount">¥{{totalUnpaidText}}</text>
+      <view class="pay-all-btn" bindtap="onPayAll" wx:if="{{totalUnpaid > 0}}">
+        <text>一键缴费</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 缴费列表 -->
+  <view class="payment-list container">
+    <view class="payment-card card" 
+      wx:for="{{payments}}" wx:key="payment_id"
+      bindtap="onPaymentTap" data-id="{{item.payment_id}}">
+      <view class="payment-header flex-between">
+        <view class="payment-type-icon">
+          <text wx:if="{{item.type === 'property_fee'}}">🏠</text>
+          <text wx:elif="{{item.type === 'parking_fee'}}">🅿️</text>
+          <text wx:elif="{{item.type === 'water_fee'}}">💧</text>
+          <text wx:else>💰</text>
+        </view>
+        <view class="tag {{item.status === 'unpaid' ? 'tag-warning' : (item.status === 'overdue' ? 'tag-danger' : 'tag-success')}}">
+          {{item.statusText}}
+        </view>
+      </view>
+      <text class="payment-title">{{item.title}}</text>
+      <view class="payment-info flex-between mt-20">
+        <text class="payment-period">账期: {{item.period}}</text>
+        <text class="payment-amount">{{item.amountText}}</text>
+      </view>
+      <view class="payment-footer flex-between mt-20">
+        <text class="payment-due">截止: {{item.due_date}}</text>
+        <view class="pay-btn" wx:if="{{item.status === 'unpaid'}}">立即缴费</view>
+        <view class="receipt-btn" wx:if="{{item.status === 'paid'}}">查看收据</view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{payments.length === 0}}">
+      <text class="empty-icon">💰</text>
+      <text class="empty-text">暂无缴费记录</text>
+    </view>
+  </view>
+</view>

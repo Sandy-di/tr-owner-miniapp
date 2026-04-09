@@ -1,0 +1,98 @@
+<!--pages/vote/create/create.wxml-->
+<view class="page-vote-create">
+  <view class="container">
+    <!-- 基本信息 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.clipboard}}" mode="aspectFit" />
+        <text>基本信息</text>
+      </view>
+      
+      <view class="form-group">
+        <text class="form-label">投票标题 <text class="required">*</text></text>
+        <input class="form-input" placeholder="请输入投票标题" value="{{form.title}}" bindinput="onTitleInput" maxlength="50" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">投票说明 <text class="required">*</text></text>
+        <textarea class="form-textarea" placeholder="请输入投票说明，包括表决事项详情" value="{{form.description}}" bindinput="onDescInput" maxlength="500" />
+      </view>
+    </view>
+
+    <!-- 表决类型 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.balance}}" mode="aspectFit" />
+        <text>表决类型</text>
+      </view>
+      <view class="type-list">
+        <view class="type-item {{form.type === item.value ? 'type-active' : ''}}" 
+          wx:for="{{typeOptions}}" wx:key="value"
+          bindtap="onTypeChange" data-value="{{item.value}}">
+          <view class="type-radio">
+            <view class="radio-dot" wx:if="{{form.type === item.value}}"></view>
+          </view>
+          <view class="type-info">
+            <text class="type-label">{{item.label}}</text>
+            <text class="type-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 核验等级 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.lock}}" mode="aspectFit" />
+        <text>身份核验等级</text>
+      </view>
+      <view class="level-select">
+        <view class="level-item {{form.require_level === item.value ? 'level-active' : ''}}" 
+          wx:for="{{levelOptions}}" wx:key="value"
+          bindtap="onLevelChange" data-value="{{item.value}}">
+          <text class="level-label">{{item.label}}</text>
+          <text class="level-desc">{{item.desc}}</text>
+          <view class="check-icon" wx:if="{{form.require_level === item.value}}">✓</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 投票选项 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.vote}}" mode="aspectFit" />
+        <text>投票选项</text>
+      </view>
+      <view class="option-list">
+        <view class="option-input-row flex-row" wx:for="{{form.options}}" wx:key="index">
+          <text class="option-index">{{index + 1}}.</text>
+          <input class="form-input flex-1" placeholder="选项内容" value="{{item}}" bindinput="onOptionInput" data-index="{{index}}" />
+          <view class="remove-btn" bindtap="onRemoveOption" data-index="{{index}}" wx:if="{{form.options.length > 2}}">
+            <image class="remove-icon" src="{{icons.close}}" mode="aspectFit" />
+          </view>
+        </view>
+      </view>
+      <view class="add-option-btn" bindtap="onAddOption" wx:if="{{form.options.length < 6}}">
+        <text>+ 添加选项</text>
+      </view>
+    </view>
+
+    <!-- 投票时长 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.stopwatch}}" mode="aspectFit" />
+        <text>投票时长</text>
+      </view>
+      <view class="duration-list flex-row">
+        <view class="duration-item {{form.duration_days === item.value ? 'duration-active' : ''}}" 
+          wx:for="{{durationOptions}}" wx:key="value"
+          bindtap="onDurationChange" data-value="{{item.value}}">
+          <text>{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="btn-primary mt-40 mb-40" bindtap="onSubmit">发起投票</view>
+  </view>
+</view>

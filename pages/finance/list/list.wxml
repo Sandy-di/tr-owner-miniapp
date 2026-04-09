@@ -1,0 +1,62 @@
+<!--pages/finance/list/list.wxml-->
+<view class="page-finance-list">
+  <!-- 财务概览 -->
+  <view class="finance-header">
+    <view class="finance-bg"></view>
+    <view class="finance-summary">
+      <view class="summary-item">
+        <text class="summary-label">总收入</text>
+        <text class="summary-amount income">{{summary.totalIncome}}</text>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-item">
+        <text class="summary-label">总支出</text>
+        <text class="summary-amount expense">{{summary.totalExpense}}</text>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-item">
+        <text class="summary-label">结余</text>
+        <text class="summary-amount">{{summary.balance}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab -->
+  <view class="tab-bar flex-row">
+    <view class="tab-item {{currentTab === item.key ? 'tab-active' : ''}}" 
+      wx:for="{{tabs}}" wx:key="key"
+      bindtap="onTabChange" data-tab="{{item.key}}">
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="finance-list container">
+    <view class="finance-card card" 
+      wx:for="{{filteredRecords}}" wx:key="finance_id"
+      bindtap="onRecordTap" data-id="{{item.finance_id}}">
+      <view class="finance-header-row flex-between">
+        <view class="finance-type flex-row">
+          <text class="type-icon">{{item.type === 'income' ? '📈' : '📉'}}</text>
+          <text class="type-label">{{item.category}}</text>
+        </view>
+        <text class="finance-amount {{item.type === 'income' ? 'income' : 'expense'}}">
+          {{item.type === 'income' ? '+' : '-'}}{{item.amountText}}
+        </text>
+      </view>
+      <text class="finance-title">{{item.title}}</text>
+      <view class="finance-footer flex-between mt-20">
+        <view class="approval-status flex-row">
+          <text class="approval-icon">{{item.status === 'published' ? '✅' : '⏳'}}</text>
+          <text class="approval-text">{{item.status === 'published' ? '已审批公示' : '待审批'}}</text>
+        </view>
+        <text class="finance-date">{{item.date}}</text>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{filteredRecords.length === 0}}">
+      <text class="empty-icon">📊</text>
+      <text class="empty-text">暂无财务记录</text>
+    </view>
+  </view>
+</view>

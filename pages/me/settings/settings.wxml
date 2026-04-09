@@ -1,0 +1,53 @@
+<!--pages/me/settings/settings.wxml-->
+<view class="page-settings">
+  <view class="container">
+    <!-- 通知设置 -->
+    <view class="card">
+      <view class="section-title">
+        <text class="icon">🔔</text>
+        <text>通知设置</text>
+      </view>
+      <view class="setting-item flex-between">
+        <text class="setting-label">报修通知</text>
+        <switch checked="{{notificationRepair}}" bindchange="onToggleRepair" color="#533afd" />
+      </view>
+      <view class="setting-item flex-between">
+        <text class="setting-label">投票通知</text>
+        <switch checked="{{notificationVote}}" bindchange="onToggleVote" color="#533afd" />
+      </view>
+      <view class="setting-item flex-between">
+        <text class="setting-label">缴费提醒</text>
+        <switch checked="{{notificationPayment}}" bindchange="onTogglePayment" color="#533afd" />
+      </view>
+      <view class="setting-item flex-between">
+        <text class="setting-label">财务公开通知</text>
+        <switch checked="{{notificationFinance}}" bindchange="onToggleFinance" color="#533afd" />
+      </view>
+    </view>
+
+    <!-- 其他设置 -->
+    <view class="card">
+      <view class="section-title">
+        <text class="icon">🔧</text>
+        <text>其他</text>
+      </view>
+      <view class="setting-item flex-between" bindtap="onClearCache">
+        <text class="setting-label">清除缓存</text>
+        <text class="setting-arrow">›</text>
+      </view>
+      <view class="setting-item flex-between" bindtap="onPrivacy">
+        <text class="setting-label">隐私协议</text>
+        <text class="setting-arrow">›</text>
+      </view>
+      <view class="setting-item flex-between" bindtap="onAbout">
+        <text class="setting-label">关于</text>
+        <text class="setting-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 版本信息 -->
+    <view class="version-info text-center mt-40">
+      <text>TR智慧社区 v1.0</text>
+    </view>
+  </view>
+</view>

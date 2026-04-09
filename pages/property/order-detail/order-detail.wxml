@@ -1,0 +1,78 @@
+<!--pages/property/order-detail/order-detail.wxml-->
+<view class="page-order-detail" wx:if="{{order}}">
+  <view class="container">
+    <!-- 状态 -->
+    <view class="status-header card text-center">
+      <view class="status-badge" style="background: {{orderStatusColor(order.status)}}22; color: {{orderStatusColor(order.status)}}">
+        {{orderStatusText(order.status)}}
+      </view>
+      <text class="order-title">{{order.title}}</text>
+      <text class="order-id">{{order.order_id}}</text>
+    </view>
+
+    <!-- 工单信息 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.clipboard}}" mode="aspectFit" />
+        <text>工单信息</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">故障类别</text>
+        <text class="info-value">{{order.category}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">位置</text>
+        <text class="info-value">{{order.building}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">预约时间</text>
+        <text class="info-value">{{order.appointment_time}}</text>
+      </view>
+      <view class="info-row flex-between">
+        <text class="info-label">SLA开始</text>
+        <text class="info-value">{{order.sla_start}}</text>
+      </view>
+      <view class="divider"></view>
+      <text class="info-desc">{{order.description}}</text>
+    </view>
+
+    <!-- 业主信息 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.user}}" mode="aspectFit" />
+        <text>业主信息</text>
+      </view>
+      <view class="owner-info flex-row">
+        <view class="owner-avatar"><text>{{order.owner_name[0]}}</text></view>
+        <view class="owner-detail flex-1">
+          <text class="owner-name">{{order.owner_name}}</text>
+          <text class="owner-phone">{{order.owner_phone}}</text>
+        </view>
+        <view class="call-btn" bindtap="onCallOwner">
+          <image class="call-icon" src="{{icons.phone}}" mode="aspectFit" />
+          <text>联系</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 维修进度 -->
+    <view class="card">
+      <view class="section-title">
+        <image class="icon" src="{{icons.wrench}}" mode="aspectFit" />
+        <text>维修操作</text>
+      </view>
+      
+      <view class="upload-section" wx:if="{{order.status === 'processing'}}">
+        <text class="upload-label">上传维修照片</text>
+        <view class="upload-btn" bindtap="onUploadPhoto">
+          <image class="upload-icon" src="{{icons.camera}}" mode="aspectFit" />
+          <text>拍照上传</text>
+        </view>
+      </view>
+
+      <view class="btn-primary mt-20" wx:if="{{order.status === 'accepted'}}" bindtap="onUpdateStatus" data-status="processing">开始处理</view>
+      <view class="btn-primary mt-20" wx:if="{{order.status === 'processing'}}" bindtap="onUpdateStatus" data-status="pending_check">维修完成</view>
+      <view class="btn-primary mt-20" wx:if="{{order.status === 'pending_check'}}" bindtap="onUpdateStatus" data-status="completed">确认完结</view>
+    </view>
+  </view>
+</view>
