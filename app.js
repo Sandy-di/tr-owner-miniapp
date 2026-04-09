@@ -32,7 +32,7 @@ App({
     openid: '',
     role: 'owner', // owner / property / committee
     verifyLevel: 0, // L0-L4
-    communityName: 'TR智慧社区',
+    communityName: '业鉴',
     baseUrl: 'https://api.example.com'
   }
 })

@@ -265,7 +265,7 @@ const mockUser = {
   avatar: '',
   role: 'owner',
   verify_level: 3,
-  community: 'TR智慧社区',
+  community: '业鉴',
   building: '3号楼2单元1801',
   area: 125,
   property_cert: '已认证',

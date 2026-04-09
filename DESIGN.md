@@ -1,4 +1,4 @@
-# TR智慧社区 · Stripe Design Language
+# 业鉴 · Stripe Design Language
 
 ## 视觉主题
 

@@ -19,7 +19,7 @@
       </view>
       <view class="community-badge">
         <image class="icon-inline" src="{{icons.location}}" mode="aspectFit" />
-        <text class="community-name">{{user.community || 'TR智慧社区'}}</text>
+        <text class="community-name">{{user.community || '业鉴'}}</text>
       </view>
     </view>
   </view>
