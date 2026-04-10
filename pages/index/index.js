@@ -1,5 +1,5 @@
 // pages/index/index.js
-const { mockVotes, mockWorkOrders, mockPayments, mockFinanceRecords, mockUser } = require('../../utils/mock')
+const { getVoteList, getWorkOrderList, getPaymentList, getCurrentUser } = require('../../utils/api')
 const { verifyLevelText, voteStatusText, orderStatusText, paymentStatusText, formatMoney, timeAgo } = require('../../utils/util')
 const { ICONS } = require('../../utils/icons')
 
@@ -23,7 +23,8 @@ Page({
       { iconKey: 'chart', title: '财务公开', url: '/pages/finance/list/list', bgColor: 'rgba(21,190,83,0.06)' },
       { iconKey: 'clipboard', title: '工单跟踪', url: '/pages/repair/list/list', bgColor: 'rgba(83,58,253,0.04)' },
       { iconKey: 'lock', title: '身份核验', url: '/pages/me/verify/verify', bgColor: 'rgba(249,107,238,0.06)' }
-    ]
+    ],
+    loading: true
   },
 
   onLoad() {
@@ -37,35 +38,54 @@ Page({
     }
   },
 
-  initData() {
-    const user = mockUser
-    const activeVotes = mockVotes.filter(v => v.status === 'active').length
-    const pendingOrders = mockWorkOrders.filter(o => ['submitted', 'accepted', 'processing', 'pending_check'].includes(o.status)).length
-    const unpaidPayments = mockPayments.filter(p => p.status === 'unpaid').length
-    const currentVote = mockVotes.find(v => v.status === 'active')
-    const recentOrders = mockWorkOrders.slice(0, 2)
+  async initData() {
+    this.setData({ loading: true })
+    try {
+      const app = getApp()
+      const user = app.globalData.userInfo || {}
 
-    // 预计算百分比，WXML 不支持 .toFixed()
-    let percentCount = '0.0'
-    let percentArea = '0.0'
-    if (currentVote && currentVote.total_count > 0) {
-      percentCount = (currentVote.participated_count / currentVote.total_count * 100).toFixed(1)
-    }
-    if (currentVote && currentVote.total_area > 0) {
-      percentArea = (currentVote.participated_area / currentVote.total_area * 100).toFixed(1)
-    }
+      // 并行请求
+      const [voteRes, orderRes, paymentRes] = await Promise.all([
+        getVoteList({ status: 'active' }).catch(() => ({ data: { records: [] } })),
+        getWorkOrderList({ status: 'submitted,accepted,processing,pending_check' }).catch(() => ({ data: { records: [] } })),
+        getPaymentList({ status: 'unpaid' }).catch(() => ({ data: { records: [] } }))
+      ])
 
-    this.setData({
-      user,
-      activeVotes,
-      pendingOrders,
-      unpaidPayments,
-      currentVote,
-      recentOrders,
-      verifyLevelText: verifyLevelText(user.verify_level),
-      percentCount,
-      percentArea
-    })
+      const votes = voteRes.data?.records || []
+      const orders = orderRes.data?.records || []
+      const payments = paymentRes.data?.records || []
+
+      const activeVotes = votes.length
+      const pendingOrders = orders.length
+      const unpaidPayments = payments.length
+      const currentVote = votes.find(v => v.status === 'active') || null
+      const recentOrders = orders.slice(0, 2)
+
+      let percentCount = '0.0'
+      let percentArea = '0.0'
+      if (currentVote && currentVote.totalCount > 0) {
+        percentCount = (currentVote.participatedCount / currentVote.totalCount * 100).toFixed(1)
+      }
+      if (currentVote && currentVote.totalArea > 0) {
+        percentArea = (currentVote.participatedArea / currentVote.totalArea * 100).toFixed(1)
+      }
+
+      this.setData({
+        user,
+        activeVotes,
+        pendingOrders,
+        unpaidPayments,
+        currentVote,
+        recentOrders,
+        verifyLevelText: verifyLevelText(user.verifyLevel || 0),
+        percentCount,
+        percentArea,
+        loading: false
+      })
+    } catch (err) {
+      console.error('首页数据加载失败:', err)
+      this.setData({ loading: false })
+    }
   },
 
   onQuickAction(e) {
@@ -81,7 +101,7 @@ Page({
   onViewAnnouncement(e) {
     const { type, id } = e.currentTarget.dataset
     if (type === 'vote') {
-      wx.navigateTo({ url: `/pages/vote/detail/detail?vote_id=V00${id}` })
+      wx.navigateTo({ url: `/pages/vote/detail/detail?vote_id=${id}` })
     } else if (type === 'payment') {
       wx.navigateTo({ url: '/pages/payment/list/list' })
     }
@@ -92,7 +112,6 @@ Page({
   },
 
   onPullDownRefresh() {
-    this.initData()
-    wx.stopPullDownRefresh()
+    this.initData().then(() => wx.stopPullDownRefresh())
   }
 })

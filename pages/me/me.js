@@ -1,5 +1,5 @@
 // pages/me/me.js
-const { mockUser } = require('../../utils/mock')
+const { getCurrentUser } = require('../../utils/api')
 const { verifyLevelText, verifyLevelColor } = require('../../utils/util')
 const { ICONS } = require('../../utils/icons')
 
@@ -30,13 +30,23 @@ Page({
     this.loadData()
   },
 
-  loadData() {
-    const user = mockUser
-    this.setData({
-      user,
-      verifyText: verifyLevelText(user.verify_level),
-      verifyColor: verifyLevelColor(user.verify_level)
-    })
+  async loadData() {
+    try {
+      const app = getApp()
+      let user = app.globalData.userInfo
+      if (!user) {
+        const res = await getCurrentUser()
+        user = res.data || {}
+      }
+      const verifyLevel = user.verifyLevel || user.verify_level || 0
+      this.setData({
+        user,
+        verifyText: verifyLevelText(verifyLevel),
+        verifyColor: verifyLevelColor(verifyLevel)
+      })
+    } catch (err) {
+      console.error('加载用户信息失败:', err)
+    }
   },
 
   onMenuTap(e) {

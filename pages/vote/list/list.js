@@ -1,5 +1,5 @@
 // pages/vote/list/list.js
-const { mockVotes, mockUser } = require('../../../utils/mock')
+const { getVoteList } = require('../../../utils/api')
 const { voteStatusText, verifyLevelText } = require('../../../utils/util')
 
 Page({
@@ -10,7 +10,8 @@ Page({
       { key: 'all', label: '全部' },
       { key: 'active', label: '进行中' },
       { key: 'closed', label: '已结束' }
-    ]
+    ],
+    loading: true
   },
 
   onLoad() {
@@ -23,15 +24,22 @@ Page({
     }
   },
 
-  loadVotes() {
-    const votes = mockVotes.map(v => ({
-      ...v,
-      statusText: voteStatusText(v.status),
-      verifyText: 'L' + v.require_level,
-      percentCount: (v.participated_count / v.total_count * 100).toFixed(1),
-      percentArea: (v.participated_area / v.total_area * 100).toFixed(1)
-    }))
-    this.setData({ votes })
+  async loadVotes() {
+    this.setData({ loading: true })
+    try {
+      const res = await getVoteList()
+      const votes = (res.data?.records || []).map(v => ({
+        ...v,
+        statusText: voteStatusText(v.status),
+        verifyText: 'L' + (v.requireLevel || v.require_level || 3),
+        percentCount: v.totalCount > 0 ? (v.participatedCount / v.totalCount * 100).toFixed(1) : '0.0',
+        percentArea: v.totalArea > 0 ? (v.participatedArea / v.totalArea * 100).toFixed(1) : '0.0'
+      }))
+      this.setData({ votes, loading: false })
+    } catch (err) {
+      console.error('加载投票列表失败:', err)
+      this.setData({ loading: false })
+    }
   },
 
   onTabChange(e) {
@@ -56,7 +64,6 @@ Page({
   },
 
   onPullDownRefresh() {
-    this.loadVotes()
-    wx.stopPullDownRefresh()
+    this.loadVotes().then(() => wx.stopPullDownRefresh())
   }
 })

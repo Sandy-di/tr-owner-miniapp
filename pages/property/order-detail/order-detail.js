@@ -1,21 +1,28 @@
 // pages/property/order-detail/order-detail.js
-const { mockWorkOrders } = require('../../../utils/mock')
+const { getWorkOrderDetail, processWorkOrder, completeWorkOrder } = require('../../../utils/api')
 const { orderStatusText, orderStatusColor } = require('../../../utils/util')
 const { ICONS } = require('../../../utils/icons')
 
 Page({
   data: {
     order: null,
-    icons: ICONS
+    icons: ICONS,
+    loading: true
   },
 
-  onLoad(options) {
-    const order_id = options.order_id || 'W001'
-    const order = mockWorkOrders.find(o => o.order_id === order_id) || mockWorkOrders[0]
-    this.setData({ order })
+  async onLoad(options) {
+    const orderId = options.order_id || options.id || ''
+    try {
+      const res = await getWorkOrderDetail(orderId)
+      const order = res.data || {}
+      this.setData({ order, loading: false })
+    } catch (err) {
+      console.error('加载工单详情失败:', err)
+      this.setData({ loading: false })
+    }
   },
 
-  onUpdateStatus(e) {
+  async onUpdateStatus(e) {
     const { status } = e.currentTarget.dataset
     const statusMap = {
       'processing': '开始处理',
@@ -25,9 +32,22 @@ Page({
     wx.showModal({
       title: '状态变更',
       content: `确认将工单状态变更为"${statusMap[status]}"？`,
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
-          wx.showToast({ title: '状态已更新', icon: 'success' })
+          try {
+            const orderId = this.data.order.orderId || this.data.order.order_id
+            if (status === 'processing') {
+              await processWorkOrder(orderId)
+            } else if (status === 'pending_check' || status === 'completed') {
+              await completeWorkOrder(orderId, { status })
+            }
+            wx.showToast({ title: '状态已更新', icon: 'success' })
+            // 刷新数据
+            const detailRes = await getWorkOrderDetail(orderId)
+            this.setData({ order: detailRes.data })
+          } catch (err) {
+            wx.showToast({ title: '更新失败', icon: 'none' })
+          }
         }
       }
     })
@@ -35,7 +55,8 @@ Page({
 
   onCallOwner() {
     if (this.data.order) {
-      wx.makePhoneCall({ phoneNumber: this.data.order.owner_phone })
+      const phone = this.data.order.ownerPhone || this.data.order.owner_phone
+      if (phone) wx.makePhoneCall({ phoneNumber: phone })
     }
   },
 

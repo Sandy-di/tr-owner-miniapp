@@ -1,5 +1,5 @@
 // pages/repair/detail/detail.js
-const { mockWorkOrders } = require('../../../utils/mock')
+const { getWorkOrderDetail, rateWorkOrder } = require('../../../utils/api')
 const { orderStatusText, orderStatusColor, formatDate } = require('../../../utils/util')
 const { ICONS } = require('../../../utils/icons')
 
@@ -10,16 +10,24 @@ Page({
     showRatingModal: false,
     rating: 0,
     comment: '',
-    icons: ICONS
+    icons: ICONS,
+    loading: true
   },
 
-  onLoad(options) {
-    const order_id = options.order_id || 'W001'
-    const order = mockWorkOrders.find(o => o.order_id === order_id) || mockWorkOrders[0]
-    this.setData({
-      order,
-      statusSteps: this.buildStatusSteps(order.status)
-    })
+  async onLoad(options) {
+    const orderId = options.order_id || options.id || ''
+    try {
+      const res = await getWorkOrderDetail(orderId)
+      const order = res.data || {}
+      this.setData({
+        order,
+        statusSteps: this.buildStatusSteps(order.status),
+        loading: false
+      })
+    } catch (err) {
+      console.error('加载工单详情失败:', err)
+      this.setData({ loading: false })
+    }
   },
 
   buildStatusSteps(currentStatus) {
@@ -48,17 +56,26 @@ Page({
     this.setData({ comment: e.detail.value })
   },
 
-  onSubmitRating() {
+  async onSubmitRating() {
     if (this.data.rating === 0) {
       wx.showToast({ title: '请选择评分', icon: 'none' })
       return
     }
     wx.showLoading({ title: '提交中...' })
-    setTimeout(() => {
+    try {
+      const orderId = this.data.order.orderId || this.data.order.order_id
+      await rateWorkOrder(orderId, {
+        rating: this.data.rating,
+        comment: this.data.comment
+      })
       wx.hideLoading()
       this.setData({ showRatingModal: false })
       wx.showToast({ title: '评价成功', icon: 'success' })
-    }, 1000)
+    } catch (err) {
+      wx.hideLoading()
+      console.error('评价提交失败:', err)
+      wx.showToast({ title: '评价失败', icon: 'none' })
+    }
   },
 
   onShowRating() {
@@ -78,6 +95,7 @@ Page({
   },
 
   onCallStaff() {
-    wx.makePhoneCall({ phoneNumber: this.data.order.staff_phone })
+    const phone = this.data.order.staffPhone || this.data.order.staff_phone
+    if (phone) wx.makePhoneCall({ phoneNumber: phone })
   }
 })

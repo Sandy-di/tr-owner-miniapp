@@ -1,35 +1,62 @@
 // pages/payment/detail/detail.js
-const { mockPayments } = require('../../../utils/mock')
+const { getPaymentDetail, createPayment } = require('../../../utils/api')
 const { formatMoney, paymentStatusText } = require('../../../utils/util')
 
 Page({
   data: {
-    payment: null
+    payment: null,
+    loading: true
   },
 
-  onLoad(options) {
-    const payment_id = options.payment_id || 'P001'
-    const payment = mockPayments.find(p => p.payment_id === payment_id) || mockPayments[0]
-    this.setData({
-      payment: {
-        ...payment,
-        statusText: paymentStatusText(payment.status),
-        amountText: formatMoney(payment.amount)
-      }
-    })
+  async onLoad(options) {
+    const paymentId = options.payment_id || options.id || ''
+    try {
+      const res = await getPaymentDetail(paymentId)
+      const payment = res.data || {}
+      this.setData({
+        payment: {
+          ...payment,
+          statusText: paymentStatusText(payment.status),
+          amountText: formatMoney(payment.amount)
+        },
+        loading: false
+      })
+    } catch (err) {
+      console.error('加载缴费详情失败:', err)
+      this.setData({ loading: false })
+    }
   },
 
-  onPay() {
+  async onPay() {
     wx.showModal({
       title: '确认缴费',
       content: `确认缴纳 ${this.data.payment.amountText}？`,
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
-          wx.showLoading({ title: '支付中...' })
-          setTimeout(() => {
+          try {
+            wx.showLoading({ title: '支付中...' })
+            const payRes = await createPayment(this.data.payment.paymentId || this.data.payment.payment_id)
             wx.hideLoading()
-            wx.showToast({ title: '支付成功', icon: 'success' })
-          }, 1500)
+            if (payRes.code === 200 && payRes.data) {
+              const payParams = payRes.data
+              wx.requestPayment({
+                timeStamp: payParams.timeStamp,
+                nonceStr: payParams.nonceStr,
+                package: payParams.packageValue,
+                signType: 'RSA',
+                paySign: payParams.paySign,
+                success: () => {
+                  wx.showToast({ title: '支付成功', icon: 'success' })
+                },
+                fail: () => {
+                  wx.showToast({ title: '支付取消', icon: 'none' })
+                }
+              })
+            }
+          } catch (err) {
+            wx.hideLoading()
+            wx.showToast({ title: '支付失败', icon: 'none' })
+          }
         }
       }
     })

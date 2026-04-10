@@ -1,5 +1,5 @@
 // pages/finance/list/list.js
-const { mockFinanceRecords } = require('../../../utils/mock')
+const { getFinanceList } = require('../../../utils/api')
 const { formatMoney } = require('../../../utils/util')
 
 Page({
@@ -15,7 +15,8 @@ Page({
       { key: 'all', label: '全部' },
       { key: 'income', label: '收入' },
       { key: 'expense', label: '支出' }
-    ]
+    ],
+    loading: true
   },
 
   onLoad() {
@@ -28,21 +29,29 @@ Page({
     }
   },
 
-  loadData() {
-    const records = mockFinanceRecords.map(r => ({
-      ...r,
-      amountText: formatMoney(r.amount)
-    }))
-    const totalIncome = mockFinanceRecords.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0)
-    const totalExpense = mockFinanceRecords.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0)
-    this.setData({
-      records,
-      summary: {
-        totalIncome: formatMoney(totalIncome),
-        totalExpense: formatMoney(totalExpense),
-        balance: formatMoney(totalIncome - totalExpense)
-      }
-    })
+  async loadData() {
+    this.setData({ loading: true })
+    try {
+      const res = await getFinanceList()
+      const records = (res.data?.records || []).map(r => ({
+        ...r,
+        amountText: formatMoney(r.amount)
+      }))
+      const totalIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0)
+      const totalExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0)
+      this.setData({
+        records,
+        summary: {
+          totalIncome: formatMoney(totalIncome),
+          totalExpense: formatMoney(totalExpense),
+          balance: formatMoney(totalIncome - totalExpense)
+        },
+        loading: false
+      })
+    } catch (err) {
+      console.error('加载财务列表失败:', err)
+      this.setData({ loading: false })
+    }
   },
 
   onTabChange(e) {
@@ -61,7 +70,6 @@ Page({
   },
 
   onPullDownRefresh() {
-    this.loadData()
-    wx.stopPullDownRefresh()
+    this.loadData().then(() => wx.stopPullDownRefresh())
   }
 })

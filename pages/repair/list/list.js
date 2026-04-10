@@ -1,5 +1,5 @@
 // pages/repair/list/list.js
-const { mockWorkOrders } = require('../../../utils/mock')
+const { getWorkOrderList } = require('../../../utils/api')
 const { orderStatusText, orderStatusColor, timeAgo } = require('../../../utils/util')
 
 Page({
@@ -10,7 +10,8 @@ Page({
       { key: 'all', label: '全部' },
       { key: 'active', label: '进行中' },
       { key: 'completed', label: '已完结' }
-    ]
+    ],
+    loading: true
   },
 
   onLoad() {
@@ -23,14 +24,21 @@ Page({
     }
   },
 
-  loadOrders() {
-    const orders = mockWorkOrders.map(o => ({
-      ...o,
-      statusText: orderStatusText(o.status),
-      statusColor: orderStatusColor(o.status),
-      timeAgo: timeAgo(o.sla_start)
-    }))
-    this.setData({ orders })
+  async loadOrders() {
+    this.setData({ loading: true })
+    try {
+      const res = await getWorkOrderList()
+      const orders = (res.data?.records || []).map(o => ({
+        ...o,
+        statusText: orderStatusText(o.status),
+        statusColor: orderStatusColor(o.status),
+        timeAgo: timeAgo(o.slaStart || o.sla_start || o.createdAt)
+      }))
+      this.setData({ orders, loading: false })
+    } catch (err) {
+      console.error('加载工单列表失败:', err)
+      this.setData({ loading: false })
+    }
   },
 
   onTabChange(e) {
@@ -54,7 +62,6 @@ Page({
   },
 
   onPullDownRefresh() {
-    this.loadOrders()
-    wx.stopPullDownRefresh()
+    this.loadOrders().then(() => wx.stopPullDownRefresh())
   }
 })

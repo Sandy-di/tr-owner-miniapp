@@ -1,5 +1,5 @@
 // pages/me/verify/verify.js
-const { mockUser } = require('../../../utils/mock')
+const { getCurrentUser, phoneVerify, propertyVerify } = require('../../../utils/api')
 const { verifyLevelText } = require('../../../utils/util')
 const { ICONS } = require('../../../utils/icons')
 
@@ -46,9 +46,21 @@ Page({
     l4Started: false
   },
 
-  onLoad() {
-    this.setData({ currentLevel: mockUser.verify_level, icons: ICONS })
-    this.updateLevelStatus()
+  async onLoad() {
+    this.setData({ icons: ICONS })
+    try {
+      const res = await getCurrentUser()
+      const user = res.data || {}
+      const currentLevel = user.verifyLevel || user.verify_level || 0
+      this.setData({ currentLevel })
+      this.updateLevelStatus()
+    } catch (err) {
+      console.error('加载用户核验等级失败:', err)
+      const app = getApp()
+      const currentLevel = app.globalData.verifyLevel || 0
+      this.setData({ currentLevel })
+      this.updateLevelStatus()
+    }
   },
 
   updateLevelStatus() {
@@ -77,7 +89,7 @@ Page({
     this.setData({ 'l3Form.propertyCertNo': e.detail.value })
   },
 
-  onSubmitL3() {
+  async onSubmitL3() {
     const { realName, idCard, propertyCertNo } = this.data.l3Form
     if (!realName.trim()) {
       wx.showToast({ title: '请输入真实姓名', icon: 'none' })
@@ -93,13 +105,27 @@ Page({
     }
 
     wx.showLoading({ title: '核验中...' })
-    // 模拟接入腾讯云实名认证
-    setTimeout(() => {
+    try {
+      const res = await propertyVerify({
+        realName,
+        idCard,
+        propertyCertNo
+      })
       wx.hideLoading()
-      this.setData({ currentLevel: 3 })
-      this.updateLevelStatus()
-      wx.showToast({ title: 'L3核验通过！', icon: 'success' })
-    }, 2000)
+      if (res.code === 200) {
+        this.setData({ currentLevel: 3 })
+        this.updateLevelStatus()
+        const app = getApp()
+        app.globalData.verifyLevel = 3
+        wx.showToast({ title: 'L3核验通过！', icon: 'success' })
+      } else {
+        wx.showToast({ title: res.message || '核验失败', icon: 'none' })
+      }
+    } catch (err) {
+      wx.hideLoading()
+      console.error('L3核验失败:', err)
+      wx.showToast({ title: '核验失败', icon: 'none' })
+    }
   },
 
   onStartL4() {
@@ -114,10 +140,13 @@ Page({
         if (res.confirm) {
           this.setData({ l4Started: true })
           wx.showLoading({ title: '人脸识别中...' })
+          // TODO: 接入腾讯云慧眼 FaceID SDK
           setTimeout(() => {
             wx.hideLoading()
             this.setData({ currentLevel: 4 })
             this.updateLevelStatus()
+            const app = getApp()
+            app.globalData.verifyLevel = 4
             wx.showToast({ title: 'L4人脸核身通过！', icon: 'success' })
           }, 3000)
         }

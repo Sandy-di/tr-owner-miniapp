@@ -1,5 +1,5 @@
 // pages/property/dashboard/dashboard.js
-const { mockWorkOrders } = require('../../../utils/mock')
+const { getWorkOrderList, acceptWorkOrder, processWorkOrder } = require('../../../utils/api')
 const { orderStatusText, orderStatusColor, timeAgo } = require('../../../utils/util')
 const { ICONS } = require('../../../utils/icons')
 
@@ -15,7 +15,8 @@ Page({
       today_total: 0
     },
     orders: [],
-    autoRefreshTimer: null
+    autoRefreshTimer: null,
+    loading: true
   },
 
   onLoad() {
@@ -28,43 +29,56 @@ Page({
     }
   },
 
-  loadData() {
-    const orders = mockWorkOrders.map(o => ({
-      ...o,
-      statusText: orderStatusText(o.status),
-      statusColor: orderStatusColor(o.status),
-      timeAgo: timeAgo(o.sla_start),
-      isSlaExceeded: this.checkSlaExceeded(o)
-    }))
+  async loadData() {
+    this.setData({ loading: true })
+    try {
+      const res = await getWorkOrderList()
+      const orders = (res.data?.records || []).map(o => ({
+        ...o,
+        statusText: orderStatusText(o.status),
+        statusColor: orderStatusColor(o.status),
+        timeAgo: timeAgo(o.slaStart || o.sla_start || o.createdAt),
+        isSlaExceeded: this.checkSlaExceeded(o)
+      }))
 
-    const stats = {
-      submitted: orders.filter(o => o.status === 'submitted').length,
-      accepted: orders.filter(o => o.status === 'accepted').length,
-      processing: orders.filter(o => o.status === 'processing').length,
-      pending_check: orders.filter(o => o.status === 'pending_check').length,
-      sla_exceeded: orders.filter(o => o.isSlaExceeded).length,
-      today_total: orders.length
+      const stats = {
+        submitted: orders.filter(o => o.status === 'submitted').length,
+        accepted: orders.filter(o => o.status === 'accepted').length,
+        processing: orders.filter(o => o.status === 'processing').length,
+        pending_check: orders.filter(o => o.status === 'pending_check').length,
+        sla_exceeded: orders.filter(o => o.isSlaExceeded).length,
+        today_total: orders.length
+      }
+
+      this.setData({ orders, stats, loading: false })
+    } catch (err) {
+      console.error('加载物业看板失败:', err)
+      this.setData({ loading: false })
     }
-
-    this.setData({ orders, stats })
   },
 
   checkSlaExceeded(order) {
     if (order.status === 'completed' || order.status === 'cancelled') return false
-    const slaStart = new Date(order.sla_start).getTime()
+    const slaStart = new Date(order.slaStart || order.sla_start).getTime()
     const now = Date.now()
     const twoHours = 2 * 60 * 60 * 1000
     return (now - slaStart) > twoHours && order.status === 'submitted'
   },
 
-  onAcceptOrder(e) {
+  async onAcceptOrder(e) {
     const { id } = e.currentTarget.dataset
     wx.showModal({
       title: '接单确认',
       content: '确认接单处理此工单？',
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
-          wx.showToast({ title: '接单成功', icon: 'success' })
+          try {
+            await acceptWorkOrder(id)
+            wx.showToast({ title: '接单成功', icon: 'success' })
+            this.loadData()
+          } catch (err) {
+            wx.showToast({ title: '接单失败', icon: 'none' })
+          }
         }
       }
     })
